@@ -1,94 +1,53 @@
+<script>
+  const toV = [
+    "agree", "arrange", "attempt", "tend", "ask", "appear", "afford", "beg", "care",
+    "choose", "decide", "demand", "expect", "fail", "happen", "help", "hope", "hesitate",
+    "intend", "invite", "learn", "manage", "offer", "oblige", "trouble", "teach", "tell",
+    "want", "warn", "wait", "wish", "prepare", "promise", "persuade", "propose", "pretend",
+    "plan", "refuse", "remind", "request", "seem", "swear"
+  ];
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Random 12 Verb Picker</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #f0f8ff;
-    }
-    h1 {
-      color: #333;
-    }
-    #verbList {
-      font-size: 1.2em;
-      margin: 20px auto;
-      max-width: 600px;
-      text-align: left;
-      line-height: 1.6;
-    }
-    button {
-      padding: 12px 24px;
-      font-size: 1em;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .note {
-      margin-top: 30px;
-      font-size: 0.9em;
-      color: gray;
-    }
-  </style>
-</head>
-<body>
-  <h1>🎯 Random 12 Verb Generator (To V / V-ing)</h1>
-  <div id="verbList">Click the button to get 12 verbs!</div>
-  <button onclick="pick12Verbs()">🔀 Pick 12 Verbs</button>
+  const vIng = [
+    "admit", "appreciate", "avoid", "be busy", "be worth", "complete",
+    "consider", "cancel", "can’t bear", "can’t stand", "can’t help",
+    "delay", "deny", "discuss", "dislike", "enjoy", "finish",
+    "fancy / imagine", "have fun", "have good time", "have trouble",
+    "have difficulty", "hate", "keep", "look forward to", "mention",
+    "mind", "miss", "practice", "prefer", "suggest", "understand",
+    "recall", "resent", "quit", "tolerate", "spend time", "waste time"
+  ];
 
-  <script>
-    const toV = [
-      "agree", "arrange", "attempt", "ask", "choose", "decide",
-      "expect", "fail", "hope", "learn", "manage", "offer", "plan",
-      "prepare", "promise", "refuse", "seem", "tend", "threaten", "wait",
-      "want", "would like"
-    ];
+  const bothSame = [
+    "begin", "start", "continue", "love", "like", "prefer"
+  ];
 
-    const vIng = [
-      "admit", "appreciate", "avoid", "be busy", "be worth", "complete",
-      "consider", "cancel", "can’t bear", "can’t stand", "can’t help",
-      "delay", "deny", "discuss", "dislike", "enjoy", "finish",
-      "fancy / imagine", "have fun", "have good time", "have trouble",
-      "have difficulty", "hate", "keep", "look forward to", "mention",
-      "mind", "miss", "practice", "prefer", "suggest", "understand",
-      "recall", "resent", "quit", "tolerate", "spend time", "waste time"
-    ];
+  const bothDiff = [
+    "stop", "remember", "forget", "try", "regret", "mean", "go on", "need"
+  ];
 
-    const bothSame = [
-      "begin", "start", "continue", "love", "like", "prefer"
-    ];
+  const vWithOToV = [
+    "advise", "allow", "permit", "recommend", "forbid", "encourage"
+  ];
 
-    const bothDiff = [
-      "stop", "remember", "forget", "try", "regret", "mean"
-    ];
 
-    function getRandomItems(arr, count) {
-      const shuffled = arr.slice().sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, count);
-    }
+  function getRandomItems(arr, count, excluded = []) {
+    const filtered = arr.filter(item => !excluded.includes(item));
+    const shuffled = filtered.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  }
 
-    function pick12Verbs() {
-      const part1 = getRandomItems(toV, 3);
-      const part2 = getRandomItems(vIng, 3);
-      const part3 = getRandomItems(bothSame, 3);
-      const part4 = getRandomItems(bothDiff, 3);
-      const combined = [...part1, ...part2, ...part3, ...part4].slice(0, 12);
+  function pick12Verbs() {
+    // Always include 3 verbs that have different meanings with To V / V-ing
+    const partDiff = getRandomItems(bothDiff, 3);
 
-      document.getElementById("verbList").innerHTML =
-        "<ul><li>" + combined.join("</li><li>") + "</li></ul>";
-    }
-  </script>
+    // Remaining 9 from all others, excluding already selected ones
+    const allPools = [...toV, ...vIng, ...bothSame, ...vWithOToV];
+    const remaining = getRandomItems(allPools, 9, partDiff);
 
-  <div class="note">
-    Generates 12 verbs with a balance of To-V, V-ing, and both-usage verbs (same/different meaning).
-  </div>
-</body>
-</html>
+    // Combine and show
+    const combined = [...partDiff, ...remaining];
+
+    document.getElementById("verbList").innerHTML =
+      "<ul><li>" + combined.join("</li><li>") + "</li></ul>";
+  }
+</script>
