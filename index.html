@@ -5,6 +5,7 @@
     "intend", "invite", "learn", "manage", "offer", "oblige", "trouble", "teach", "tell",
     "want", "warn", "wait", "wish", "prepare", "promise", "persuade", "propose", "pretend",
     "plan", "refuse", "remind", "request", "seem", "swear"
+    // Đã xóa: remember, forget, try, regret, mean, stop, go on, need
   ];
 
   const vIng = [
@@ -15,10 +16,13 @@
     "have difficulty", "hate", "keep", "look forward to", "mention",
     "mind", "miss", "practice", "prefer", "suggest", "understand",
     "recall", "resent", "quit", "tolerate", "spend time", "waste time"
+    // Đã thêm: prefer
+    // Đã xóa: remember, forget, try, regret, mean, stop, go on, need
   ];
 
   const bothSame = [
-    "begin", "start", "continue", "love", "like", "prefer"
+    "begin", "start", "continue", "love", "like"
+    // Đã xóa: prefer
   ];
 
   const bothDiff = [
@@ -28,7 +32,6 @@
   const vWithOToV = [
     "advise", "allow", "permit", "recommend", "forbid", "encourage"
   ];
-
 
   function getRandomItems(arr, count, excluded = []) {
     const filtered = arr.filter(item => !excluded.includes(item));
@@ -40,8 +43,10 @@
     // Always include 3 verbs that have different meanings with To V / V-ing
     const partDiff = getRandomItems(bothDiff, 3);
 
+    // Combine all pools and eliminate duplicates using Set
+    const allPools = Array.from(new Set([...toV, ...vIng, ...bothSame, ...vWithOToV]));
+
     // Remaining 9 from all others, excluding already selected ones
-    const allPools = [...toV, ...vIng, ...bothSame, ...vWithOToV];
     const remaining = getRandomItems(allPools, 9, partDiff);
 
     // Combine and show
